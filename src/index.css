@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ── Default (neutral) ── */
+  :root {
+    --background: 30 12% 96%;
+    --foreground: 220 20% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 14%;
+
+    --primary: 220 18% 22%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 30 10% 93%;
+    --secondary-foreground: 220 20% 14%;
+
+    --muted: 30 8% 94%;
+    --muted-foreground: 220 8% 50%;
+
+    --accent: 24 70% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 60% 55%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 152 50% 42%;
+    --success-foreground: 0 0% 98%;
+
+    --border: 220 10% 91%;
+    --input: 220 10% 91%;
+    --ring: 220 18% 22%;
+
+    --radius: 0.875rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --font-heading: 'DM Sans', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+
+    --champagne: 30 42% 94%;
+    --bronze: 18 18% 51%;
+    --truffle: 13 27% 14%;
+
+    --shadow-card: 0 1px 8px -2px hsl(220 15% 20% / 0.06);
+    --shadow-card-hover: 0 6px 20px -4px hsl(220 15% 20% / 0.1);
+    --shadow-bottom-bar: 0 -1px 12px -2px hsl(220 15% 20% / 0.06);
+  }
+
+  .dark {
+    --background: 220 16% 7%;
+    --foreground: 30 10% 92%;
+    --card: 220 14% 11%;
+    --card-foreground: 30 10% 92%;
+    --popover: 220 14% 11%;
+    --popover-foreground: 30 10% 92%;
+    --primary: 220 20% 65%;
+    --primary-foreground: 220 16% 7%;
+    --secondary: 220 12% 16%;
+    --secondary-foreground: 30 10% 92%;
+    --muted: 220 10% 14%;
+    --muted-foreground: 30 6% 55%;
+    --accent: 24 60% 58%;
+    --accent-foreground: 30 10% 92%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 10% 18%;
+    --input: 220 10% 18%;
+    --ring: 220 20% 65%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* ── Men: sleek, cool, navy/charcoal ── */
+  :root[data-gender="male"]:not(.dark) {
+    --background: 216 14% 96%;
+    --foreground: 216 28% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 216 28% 12%;
+    --primary: 216 52% 24%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 216 12% 92%;
+    --secondary-foreground: 216 28% 12%;
+    --muted: 216 8% 93%;
+    --muted-foreground: 216 10% 48%;
+    --accent: 24 85% 52%;
+    --accent-foreground: 0 0% 100%;
+    --border: 216 10% 89%;
+    --input: 216 10% 89%;
+    --ring: 216 52% 24%;
+    --champagne: 216 14% 94%;
+    --bronze: 216 14% 48%;
+    --truffle: 216 22% 12%;
+  }
+
+  /* ── Women: warm, soft blush, rose-gold ── */
+  :root[data-gender="female"]:not(.dark) {
+    --background: 20 18% 96%;
+    --foreground: 350 18% 14%;
+    --card: 20 20% 99%;
+    --card-foreground: 350 18% 14%;
+    --primary: 350 32% 30%;
+    --primary-foreground: 20 20% 98%;
+    --secondary: 20 14% 93%;
+    --secondary-foreground: 350 18% 14%;
+    --muted: 20 10% 94%;
+    --muted-foreground: 350 8% 48%;
+    --accent: 18 55% 60%;
+    --accent-foreground: 0 0% 100%;
+    --border: 20 12% 90%;
+    --input: 20 12% 90%;
+    --ring: 350 32% 30%;
+    --champagne: 20 24% 95%;
+    --bronze: 350 14% 52%;
+    --truffle: 350 18% 14%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .skeleton-shimmer {
+    @apply relative overflow-hidden;
+    background: hsl(var(--muted));
+  }
+  .skeleton-shimmer::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, hsl(var(--background) / 0.5), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+  .card-shadow-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slide-up {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes jelly {
+  0% { transform: scale(1, 1); }
+  20% { transform: scale(1.12, 0.88); }
+  40% { transform: scale(0.88, 1.1); }
+  55% { transform: scale(1.06, 0.94); }
+  70% { transform: scale(0.97, 1.03); }
+  85% { transform: scale(1.01, 0.99); }
+  100% { transform: scale(1, 1); }
+}
+
+@keyframes jelly-container {
+  0% { transform: scaleY(1) scaleX(1); }
+  15% { transform: scaleY(0.97) scaleX(1.01); }
+  30% { transform: scaleY(1.02) scaleX(0.99); }
+  45% { transform: scaleY(0.99) scaleX(1.005); }
+  60% { transform: scaleY(1.005) scaleX(0.998); }
+  80% { transform: scaleY(0.999) scaleX(1.001); }
+  100% { transform: scaleY(1) scaleX(1); }
+}
