@@ -1,8 +1,9 @@
-import { Home, Search, CalendarDays, User } from 'lucide-react';
+import { Home, Search, CalendarDays, User, MapPin } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const tabs = [
   { icon: Home, label: 'Home', path: '/' },
+  { icon: MapPin, label: 'At Home', path: '/at-home' },
   { icon: Search, label: 'Explore', path: '/explore' },
   { icon: CalendarDays, label: 'Bookings', path: '/bookings' },
   { icon: User, label: 'Profile', path: '/profile' },
@@ -12,7 +13,7 @@ const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (location.pathname.startsWith('/salon/') || location.pathname.startsWith('/booking/')) return null;
+  if (location.pathname.startsWith('/salon/') || location.pathname.startsWith('/booking/') || location.pathname.startsWith('/artist/') || location.pathname.startsWith('/at-home-booking/')) return null;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-t border-border" style={{ boxShadow: 'var(--shadow-bottom-bar)' }}>

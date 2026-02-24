@@ -12,6 +12,9 @@ import Bookings from "./pages/Bookings";
 import Offers from "./pages/Offers";
 import Explore from "./pages/Explore";
 import Profile from "./pages/Profile";
+import AtHome from "./pages/AtHome";
+import ArtistProfile from "./pages/ArtistProfile";
+import AtHomeBooking from "./pages/AtHomeBooking";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +35,9 @@ const App = () => (
               <Route path="/offers" element={<Offers />} />
               <Route path="/explore" element={<Explore />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/at-home" element={<AtHome />} />
+              <Route path="/artist/:id" element={<ArtistProfile />} />
+              <Route path="/at-home-booking/:id" element={<AtHomeBooking />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
