@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GenderProvider } from "@/contexts/GenderContext";
 import BottomNav from "@/components/BottomNav";
+import GenderBackground from "@/components/GenderBackground";
 import Index from "./pages/Index";
 import SalonDetail from "./pages/SalonDetail";
 import BookingFlow from "./pages/BookingFlow";
@@ -26,21 +27,26 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="max-w-lg mx-auto relative">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/salon/:id" element={<SalonDetail />} />
-              <Route path="/booking/:id" element={<BookingFlow />} />
-              <Route path="/bookings" element={<Bookings />} />
-              <Route path="/offers" element={<Offers />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/at-home" element={<AtHome />} />
-              <Route path="/artist/:id" element={<ArtistProfile />} />
-              <Route path="/at-home-booking/:id" element={<AtHomeBooking />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <BottomNav />
+          <div className="max-w-lg mx-auto relative min-h-screen overflow-hidden">
+            <div className="fixed inset-0 max-w-lg mx-auto -z-10 pointer-events-none">
+              <GenderBackground />
+            </div>
+            <div className="relative z-0">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/salon/:id" element={<SalonDetail />} />
+                <Route path="/booking/:id" element={<BookingFlow />} />
+                <Route path="/bookings" element={<Bookings />} />
+                <Route path="/offers" element={<Offers />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/at-home" element={<AtHome />} />
+                <Route path="/artist/:id" element={<ArtistProfile />} />
+                <Route path="/at-home-booking/:id" element={<AtHomeBooking />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <BottomNav />
+            </div>
           </div>
         </BrowserRouter>
       </TooltipProvider>
