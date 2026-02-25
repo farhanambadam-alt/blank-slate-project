@@ -1,21 +1,29 @@
 import { useState } from 'react';
-import { MapPin, Star, Clock, Shield, Bell, ChevronDown, Navigation } from 'lucide-react';
+import { MapPin, Star, Clock, Shield, Bell, ChevronDown, Navigation, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useGender } from '@/contexts/GenderContext';
 import { atHomeArtists } from '@/data/atHomeData';
+import GenderBackground from '@/components/GenderBackground';
 
 const AtHome = () => {
   const navigate = useNavigate();
-  const [hasArtists] = useState(atHomeArtists.filter(a => a.isAvailable).length > 0);
-
+  const { gender, setGender } = useGender();
   const availableArtists = atHomeArtists.filter(a => a.isAvailable);
+  const hasArtists = availableArtists.length > 0;
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen relative pb-20 overflow-hidden">
+      {/* Dynamic SVG Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-background" />
+        <GenderBackground />
+      </div>
+
       {/* Map Header */}
-      <div className="relative h-[200px] bg-secondary overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-muted/60 to-secondary">
-          {/* Stylized map placeholder */}
-          <div className="absolute inset-0 opacity-30">
+      <div className="relative h-[200px] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/80">
+          {/* Stylized map lines */}
+          <div className="absolute inset-0 opacity-20">
             <svg viewBox="0 0 400 200" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
               <path d="M0,100 Q50,50 100,80 T200,60 T300,90 T400,70" fill="none" stroke="hsl(var(--border))" strokeWidth="1.5" />
               <path d="M0,140 Q80,100 150,130 T300,110 T400,140" fill="none" stroke="hsl(var(--border))" strokeWidth="1" />
@@ -51,7 +59,7 @@ const AtHome = () => {
           })}
         </div>
         {/* Header overlay */}
-        <div className="absolute top-0 left-0 right-0 px-5 pt-[env(safe-area-inset-top)] pt-5">
+        <div className="absolute top-0 left-0 right-0 px-5 pt-5">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading font-bold text-[18px] text-foreground">At Home</h1>
@@ -68,14 +76,40 @@ const AtHome = () => {
         </div>
       </div>
 
+      {/* Gender Toggle */}
+      <div className="flex justify-center -mt-4 relative z-10 mb-4">
+        <div className="bg-card/90 backdrop-blur-md rounded-full p-1 border border-border shadow-lg flex">
+          <button
+            onClick={() => setGender('female')}
+            className={`px-6 py-2.5 rounded-full text-[13px] font-heading font-semibold transition-all duration-300 min-h-[40px] ${
+              gender === 'female'
+                ? 'bg-primary text-primary-foreground shadow-md'
+                : 'text-muted-foreground'
+            }`}
+          >
+            Women
+          </button>
+          <button
+            onClick={() => setGender('male')}
+            className={`px-6 py-2.5 rounded-full text-[13px] font-heading font-semibold transition-all duration-300 min-h-[40px] ${
+              gender === 'male'
+                ? 'bg-primary text-primary-foreground shadow-md'
+                : 'text-muted-foreground'
+            }`}
+          >
+            Men
+          </button>
+        </div>
+      </div>
+
       {/* Content */}
       {hasArtists ? (
-        <div className="px-5 pt-5">
+        <div className="px-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-heading font-semibold text-[16px] text-foreground">
               Available Artists Nearby
             </h2>
-            <span className="text-[12px] font-body text-muted-foreground">
+            <span className="text-[12px] font-body text-primary font-medium">
               {availableArtists.length} found
             </span>
           </div>
@@ -84,14 +118,18 @@ const AtHome = () => {
             {availableArtists.map((artist, index) => (
               <div
                 key={artist.id}
-                className="bg-card rounded-2xl border border-border card-shadow overflow-hidden animate-fade-in-up"
+                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border card-shadow overflow-hidden animate-fade-in-up"
                 style={{ animationDelay: `${index * 80}ms`, animationFillMode: 'both' }}
               >
                 <div className="p-4">
                   {/* Artist info row */}
                   <div className="flex items-start gap-3.5">
-                    <div className="w-[72px] h-[72px] rounded-full overflow-hidden flex-shrink-0 ring-2 ring-border">
-                      <img src={artist.avatar} alt={artist.name} className="w-full h-full object-cover" />
+                    <div className="relative">
+                      <div className="w-[72px] h-[72px] rounded-full overflow-hidden flex-shrink-0 ring-2 ring-border">
+                        <img src={artist.avatar} alt={artist.name} className="w-full h-full object-cover" />
+                      </div>
+                      {/* Online indicator */}
+                      <div className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-success border-2 border-card" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-heading font-semibold text-[15px] text-foreground leading-tight">{artist.name}</h3>
@@ -121,8 +159,20 @@ const AtHome = () => {
                     </div>
                   </div>
 
-                  {/* Work thumbnails */}
+                  {/* Work thumbnails with video preview */}
                   <div className="flex gap-2 mt-3.5 overflow-x-auto scrollbar-hide">
+                    {/* Video thumbnail */}
+                    <button
+                      onClick={() => navigate(`/artist/${artist.id}`)}
+                      className="relative w-[80px] h-[80px] flex-shrink-0 rounded-xl overflow-hidden ring-1 ring-border"
+                    >
+                      <img src={artist.videoThumbnail} alt="Video" className="w-full h-full object-cover" loading="lazy" />
+                      <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center">
+                        <div className="w-7 h-7 rounded-full bg-card/80 backdrop-blur-sm flex items-center justify-center">
+                          <Play size={10} className="text-foreground ml-0.5" />
+                        </div>
+                      </div>
+                    </button>
                     {artist.workPhotos.map((photo, i) => (
                       <div key={i} className="w-[80px] h-[80px] flex-shrink-0 rounded-xl overflow-hidden ring-1 ring-border">
                         <img src={photo} alt={`Work ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
@@ -145,7 +195,7 @@ const AtHome = () => {
       ) : (
         /* Empty State */
         <div className="px-5 pt-16 flex flex-col items-center text-center">
-          <div className="w-32 h-32 rounded-full bg-secondary flex items-center justify-center mb-6">
+          <div className="w-32 h-32 rounded-full bg-secondary/60 backdrop-blur-sm flex items-center justify-center mb-6">
             <MapPin size={48} className="text-muted-foreground/40" />
           </div>
           <h2 className="font-heading font-bold text-[18px] text-foreground mb-2">

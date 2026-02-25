@@ -3,6 +3,8 @@ import { ArrowLeft, Star, Clock, Shield, CheckCircle2, Play, Plus, Minus, MapPin
 import { useNavigate, useParams } from 'react-router-dom';
 import { atHomeArtists, atHomeReviews } from '@/data/atHomeData';
 import type { AtHomeService } from '@/types/atHome';
+import GenderBackground from '@/components/GenderBackground';
+import ServiceDrawer from '@/components/ServiceDrawer';
 
 const ArtistProfile = () => {
   const { id } = useParams();
@@ -15,10 +17,11 @@ const ArtistProfile = () => {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [isFavorite, setIsFavorite] = useState(false);
   const [sliderPositions, setSliderPositions] = useState<Record<string, number>>({});
+  const [showVideo, setShowVideo] = useState(false);
+  const [drawerService, setDrawerService] = useState<AtHomeService | null>(null);
 
   const categories = useMemo(() => {
-    const cats = [...new Set(artist.services.map(s => s.category))];
-    return cats;
+    return [...new Set(artist.services.map(s => s.category))];
   }, [artist]);
 
   const filteredServices = serviceFilter
@@ -52,7 +55,6 @@ const ArtistProfile = () => {
     setSliderPositions(prev => ({ ...prev, [photoId]: percent }));
   };
 
-  // Rating distribution
   const ratingDist = [5, 4, 3, 2, 1].map(r => ({
     rating: r,
     count: reviews.filter(rev => rev.rating === r).length,
@@ -63,20 +65,43 @@ const ArtistProfile = () => {
     ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
     : '0.0';
 
+  // Demo YouTube video
+  const videoId = 'dQw4w9WgXcQ';
+
   return (
-    <div className="min-h-screen bg-background pb-28">
+    <div className="min-h-screen relative pb-28 overflow-hidden">
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-background" />
+        <GenderBackground />
+      </div>
+
       {/* Video Hero */}
-      <div className="relative h-[240px]">
-        <img src={artist.videoThumbnail} alt={artist.name} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/20" />
-        {/* Play button overlay */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <button className="w-14 h-14 rounded-full bg-card/90 backdrop-blur-md flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-            <Play size={22} className="text-foreground ml-0.5" />
-          </button>
-        </div>
+      <div className="relative h-[260px]">
+        {showVideo ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+            className="w-full h-full"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            title={artist.name}
+          />
+        ) : (
+          <>
+            <img src={artist.videoThumbnail} alt={artist.name} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-foreground/20" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <button
+                onClick={() => setShowVideo(true)}
+                className="w-14 h-14 rounded-full bg-card/90 backdrop-blur-md flex items-center justify-center shadow-lg active:scale-90 transition-transform"
+              >
+                <Play size={22} className="text-foreground ml-0.5" />
+              </button>
+            </div>
+          </>
+        )}
         {/* Top nav */}
-        <div className="absolute top-0 left-0 right-0 px-4 pt-[env(safe-area-inset-top)] pt-4 flex justify-between">
+        <div className="absolute top-0 left-0 right-0 px-4 pt-4 flex justify-between">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md flex items-center justify-center border border-border/30 min-h-[44px] min-w-[44px]"
@@ -95,7 +120,7 @@ const ArtistProfile = () => {
             </button>
           </div>
         </div>
-        {/* Live badge */}
+        {/* Video badge */}
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-destructive/90 backdrop-blur-sm text-destructive-foreground text-[10px] font-heading font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground animate-pulse" />
           VIDEO
@@ -104,7 +129,7 @@ const ArtistProfile = () => {
 
       {/* Artist Info Card */}
       <div className="px-5 -mt-6 relative z-10">
-        <div className="bg-card rounded-2xl border border-border card-shadow p-4">
+        <div className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border card-shadow p-4">
           <div className="flex items-center gap-3.5">
             <div className="w-[56px] h-[56px] rounded-full overflow-hidden flex-shrink-0 ring-2 ring-border">
               <img src={artist.avatar} alt={artist.name} className="w-full h-full object-cover" />
@@ -118,7 +143,6 @@ const ArtistProfile = () => {
             </div>
           </div>
 
-          {/* Quick stats bar */}
           <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
             <div className="flex items-center gap-1.5 flex-1 justify-center">
               <Star size={14} className="text-accent fill-accent" />
@@ -147,7 +171,7 @@ const ArtistProfile = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2.5 text-[12px] font-heading font-semibold capitalize rounded-xl transition-all duration-200 min-h-[40px] ${
-              activeTab === tab ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'
+              activeTab === tab ? 'bg-primary text-primary-foreground' : 'bg-card/80 backdrop-blur-sm text-muted-foreground border border-border'
             }`}
           >
             {tab === 'portfolio' ? 'Before & After' : tab}
@@ -160,12 +184,11 @@ const ArtistProfile = () => {
         <div className="animate-fade-in-up" style={{ animationDuration: '250ms' }}>
           <div className="px-5 pt-2 pb-2">
             <h2 className="font-heading font-semibold text-[15px] text-foreground mb-3">Services & Packages</h2>
-            {/* Category filter */}
             <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
               <button
                 onClick={() => setServiceFilter(null)}
                 className={`px-3.5 py-1.5 rounded-xl text-[11px] font-heading font-semibold whitespace-nowrap transition-all min-h-[32px] ${
-                  !serviceFilter ? 'bg-primary text-primary-foreground' : 'bg-card text-muted-foreground border border-border'
+                  !serviceFilter ? 'bg-primary text-primary-foreground' : 'bg-card/80 text-muted-foreground border border-border'
                 }`}
               >
                 All
@@ -175,7 +198,7 @@ const ArtistProfile = () => {
                   key={cat}
                   onClick={() => setServiceFilter(cat === serviceFilter ? null : cat)}
                   className={`px-3.5 py-1.5 rounded-xl text-[11px] font-heading font-semibold capitalize whitespace-nowrap transition-all min-h-[32px] ${
-                    serviceFilter === cat ? 'bg-primary text-primary-foreground' : 'bg-card text-muted-foreground border border-border'
+                    serviceFilter === cat ? 'bg-primary text-primary-foreground' : 'bg-card/80 text-muted-foreground border border-border'
                   }`}
                 >
                   {cat}
@@ -184,7 +207,6 @@ const ArtistProfile = () => {
             </div>
           </div>
 
-          {/* Service cards */}
           <div className="px-4 space-y-2.5">
             {filteredServices.map((service, i) => (
               <ServiceCard
@@ -193,6 +215,7 @@ const ArtistProfile = () => {
                 qty={cart[service.id] || 0}
                 onAdd={() => addToCart(service.id)}
                 onRemove={() => removeFromCart(service.id)}
+                onTap={() => setDrawerService(service)}
                 index={i}
               />
             ))}
@@ -203,8 +226,7 @@ const ArtistProfile = () => {
       {/* Reviews Tab */}
       {activeTab === 'reviews' && (
         <div className="animate-fade-in-up px-5 pt-2" style={{ animationDuration: '250ms' }}>
-          {/* Rating summary */}
-          <div className="bg-card rounded-2xl border border-border card-shadow p-4 mb-4">
+          <div className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border card-shadow p-4 mb-4">
             <div className="flex items-center gap-5">
               <div className="text-center">
                 <span className="font-heading font-bold text-[36px] text-foreground leading-none">{avgRating}</span>
@@ -220,10 +242,7 @@ const ArtistProfile = () => {
                   <div key={d.rating} className="flex items-center gap-2">
                     <span className="text-[11px] font-heading text-muted-foreground w-3">{d.rating}</span>
                     <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-accent rounded-full transition-all duration-500"
-                        style={{ width: `${d.percent}%` }}
-                      />
+                      <div className="h-full bg-accent rounded-full transition-all duration-500" style={{ width: `${d.percent}%` }} />
                     </div>
                     <span className="text-[10px] text-muted-foreground w-4 text-right">{d.count}</span>
                   </div>
@@ -232,12 +251,11 @@ const ArtistProfile = () => {
             </div>
           </div>
 
-          {/* Review cards */}
           <div className="space-y-3">
             {reviews.map((review, i) => (
               <div
                 key={review.id}
-                className="bg-card rounded-2xl border border-border card-shadow p-4"
+                className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border card-shadow p-4"
                 style={{ animation: `fade-in-up 0.35s ease-out ${i * 60}ms both` }}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -261,7 +279,6 @@ const ArtistProfile = () => {
                 </span>
                 <p className="text-[13px] font-body text-muted-foreground leading-relaxed">{review.text}</p>
 
-                {/* Before / After photos */}
                 {review.beforePhoto && review.afterPhoto && (
                   <div className="flex gap-2 mt-3">
                     <div className="flex-1">
@@ -289,7 +306,7 @@ const ArtistProfile = () => {
         </div>
       )}
 
-      {/* Before & After / Portfolio Tab */}
+      {/* Before & After Tab */}
       {activeTab === 'portfolio' && (
         <div className="animate-fade-in-up px-5 pt-2" style={{ animationDuration: '250ms' }}>
           <h2 className="font-heading font-semibold text-[15px] text-foreground mb-3">Before & After</h2>
@@ -298,7 +315,7 @@ const ArtistProfile = () => {
               {artist.beforeAfterPhotos.map(photo => {
                 const pos = sliderPositions[photo.id] ?? 50;
                 return (
-                  <div key={photo.id} className="bg-card rounded-2xl border border-border card-shadow overflow-hidden">
+                  <div key={photo.id} className="bg-card/95 backdrop-blur-sm rounded-2xl border border-border card-shadow overflow-hidden">
                     <div className="px-4 pt-3 pb-2">
                       <span className="text-[12px] font-heading font-semibold text-foreground">{photo.service}</span>
                     </div>
@@ -307,20 +324,16 @@ const ArtistProfile = () => {
                       onMouseMove={(e) => e.buttons === 1 && handleSliderMove(photo.id, e)}
                       onTouchMove={(e) => handleSliderMove(photo.id, e)}
                     >
-                      {/* After image (full) */}
                       <img src={photo.after} alt="After" className="absolute inset-0 w-full h-full object-cover" />
-                      {/* Before image (clipped) */}
                       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
                         <img src={photo.before} alt="Before" className="absolute inset-0 w-full h-full object-cover" style={{ minWidth: `${(100 / pos) * 100}%`, maxWidth: `${(100 / pos) * 100}%` }} />
                       </div>
-                      {/* Slider handle */}
                       <div className="absolute top-0 bottom-0" style={{ left: `${pos}%` }}>
                         <div className="absolute -translate-x-1/2 top-0 bottom-0 w-0.5 bg-card shadow-lg" />
                         <div className="absolute -translate-x-1/2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card shadow-lg flex items-center justify-center border border-border">
                           <span className="text-[10px] font-heading font-bold text-muted-foreground">⇔</span>
                         </div>
                       </div>
-                      {/* Labels */}
                       <span className="absolute top-3 left-3 text-[10px] font-heading font-bold text-card bg-foreground/70 px-2 py-0.5 rounded-md backdrop-blur-sm">BEFORE</span>
                       <span className="absolute top-3 right-3 text-[10px] font-heading font-bold text-card bg-success/80 px-2 py-0.5 rounded-md backdrop-blur-sm">AFTER</span>
                     </div>
@@ -342,7 +355,6 @@ const ArtistProfile = () => {
           className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border px-5 z-50"
           style={{ boxShadow: 'var(--shadow-bottom-bar)', animation: 'slide-up 0.3s ease-out' }}
         >
-          {/* Minimum booking warning */}
           {shortfall > 0 && (
             <div className="flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-xl px-3 py-2 mt-3">
               <AlertCircle size={14} className="text-accent flex-shrink-0" />
@@ -373,6 +385,17 @@ const ArtistProfile = () => {
           </div>
         </div>
       )}
+
+      {/* Service Detail Drawer */}
+      <ServiceDrawer
+        service={drawerService}
+        open={!!drawerService}
+        onClose={() => setDrawerService(null)}
+        onBook={(svc) => {
+          addToCart(svc.id);
+          setDrawerService(null);
+        }}
+      />
     </div>
   );
 };
@@ -382,20 +405,32 @@ const ServiceCard = ({
   qty,
   onAdd,
   onRemove,
+  onTap,
   index,
 }: {
   service: AtHomeService;
   qty: number;
   onAdd: () => void;
   onRemove: () => void;
+  onTap: () => void;
   index: number;
 }) => (
   <div
-    className="flex items-center gap-3.5 bg-card rounded-2xl p-3 card-shadow border border-border"
+    className="flex items-center gap-3.5 bg-card/95 backdrop-blur-sm rounded-2xl p-3 card-shadow border border-border cursor-pointer"
     style={{ animation: `fade-in-up 0.3s ease-out ${index * 50}ms both` }}
+    onClick={onTap}
   >
-    <div className="w-[72px] h-[72px] rounded-xl overflow-hidden flex-shrink-0 ring-1 ring-border">
+    <div className="relative w-[80px] h-[80px] rounded-xl overflow-hidden flex-shrink-0 ring-1 ring-border">
       <img src={service.image} alt={service.name} className="w-full h-full object-cover" loading="lazy" />
+      {service.originalPrice && (
+        <div className="absolute top-1 left-1 bg-destructive/90 text-destructive-foreground text-[8px] font-heading font-bold px-1.5 py-0.5 rounded-md">
+          {Math.round(((service.originalPrice - service.price) / service.originalPrice) * 100)}% OFF
+        </div>
+      )}
+      {/* Play icon overlay on thumbnail */}
+      <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-card/80 flex items-center justify-center">
+        <Play size={8} className="text-foreground ml-px" />
+      </div>
     </div>
     <div className="flex-1 min-w-0">
       <h4 className="font-heading font-medium text-[13px] text-foreground leading-tight">{service.name}</h4>
@@ -410,24 +445,26 @@ const ServiceCard = ({
         )}
       </div>
     </div>
-    {qty > 0 ? (
-      <div className="flex items-center gap-1 bg-primary/8 rounded-xl px-1 border border-primary/15 flex-shrink-0">
-        <button onClick={onRemove} className="p-2 text-primary min-h-[40px] min-w-[32px] flex items-center justify-center">
-          <Minus size={13} />
+    <div onClick={(e) => e.stopPropagation()}>
+      {qty > 0 ? (
+        <div className="flex items-center gap-1 bg-primary/8 rounded-xl px-1 border border-primary/15 flex-shrink-0">
+          <button onClick={onRemove} className="p-2 text-primary min-h-[40px] min-w-[32px] flex items-center justify-center">
+            <Minus size={13} />
+          </button>
+          <span className="text-[13px] font-heading font-semibold text-primary w-4 text-center">{qty}</span>
+          <button onClick={onAdd} className="p-2 text-primary min-h-[40px] min-w-[32px] flex items-center justify-center">
+            <Plus size={13} />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onAdd}
+          className="bg-primary text-primary-foreground text-[11px] font-heading font-semibold px-4 py-2 rounded-xl active:scale-95 transition-transform min-h-[40px] flex-shrink-0"
+        >
+          Book Now
         </button>
-        <span className="text-[13px] font-heading font-semibold text-primary w-4 text-center">{qty}</span>
-        <button onClick={onAdd} className="p-2 text-primary min-h-[40px] min-w-[32px] flex items-center justify-center">
-          <Plus size={13} />
-        </button>
-      </div>
-    ) : (
-      <button
-        onClick={onAdd}
-        className="bg-primary text-primary-foreground text-[11px] font-heading font-semibold px-4 py-2 rounded-xl active:scale-95 transition-transform min-h-[40px] flex-shrink-0"
-      >
-        Add
-      </button>
-    )}
+      )}
+    </div>
   </div>
 );
 
