@@ -1,5 +1,50 @@
 import { useGender } from '@/contexts/GenderContext';
 
+const DOTS = [
+  { cx: 55, cy: 65, r: 1.8 }, { cx: 195, cy: 110, r: 1.3 },
+  { cx: 310, cy: 180, r: 1 }, { cx: 140, cy: 250, r: 1.8 },
+  { cx: 350, cy: 330, r: 1.3 }, { cx: 80, cy: 420, r: 1.5 },
+  { cx: 250, cy: 480, r: 1.1 }, { cx: 180, cy: 560, r: 1.6 },
+  { cx: 320, cy: 620, r: 1.3 }, { cx: 60, cy: 700, r: 1.5 },
+  { cx: 230, cy: 760, r: 1 }, { cx: 370, cy: 820, r: 1.3 },
+  { cx: 110, cy: 150, r: 0.8 }, { cx: 280, cy: 260, r: 1.1 },
+  { cx: 45, cy: 530, r: 1.3 }, { cx: 340, cy: 500, r: 0.8 },
+  { cx: 200, cy: 380, r: 1.5 }, { cx: 160, cy: 680, r: 1 },
+  { cx: 30, cy: 300, r: 1.2 }, { cx: 380, cy: 150, r: 1 },
+  { cx: 120, cy: 850, r: 1.4 }, { cx: 270, cy: 50, r: 1.1 },
+  { cx: 90, cy: 580, r: 0.9 }, { cx: 330, cy: 720, r: 1.3 },
+  { cx: 170, cy: 40, r: 1 }, { cx: 50, cy: 180, r: 1.2 },
+  { cx: 390, cy: 440, r: 0.9 }, { cx: 220, cy: 870, r: 1.1 },
+];
+
+const SPARKLES = [
+  { x: 145, y: 95, s: 0.35 }, { x: 310, y: 280, s: 0.55 },
+  { x: 230, y: 430, s: 0.4 }, { x: 80, y: 340, s: 0.3 },
+  { x: 350, y: 550, s: 0.35 }, { x: 100, y: 620, s: 0.5 },
+  { x: 270, y: 700, s: 0.35 }, { x: 55, y: 190, s: 0.28 },
+  { x: 330, y: 80, s: 0.42 }, { x: 190, y: 600, s: 0.3 },
+  { x: 360, y: 750, s: 0.35 }, { x: 70, y: 830, s: 0.42 },
+  { x: 200, y: 170, s: 0.32 }, { x: 40, y: 470, s: 0.38 },
+  { x: 300, y: 400, s: 0.45 }, { x: 160, y: 780, s: 0.33 },
+  { x: 380, y: 250, s: 0.3 }, { x: 120, y: 500, s: 0.4 },
+];
+
+const SparklesSVG = () => (
+  <>
+    {DOTS.map((s, i) => (
+      <circle key={`d-${i}`} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.45 + (i % 3) * 0.12}>
+        <animate attributeName="opacity" values={`${0.25};${0.65};${0.25}`} dur={`${3 + i * 0.35}s`} repeatCount="indefinite" />
+      </circle>
+    ))}
+    {SPARKLES.map((sp, i) => (
+      <g key={`s-${i}`} transform={`translate(${sp.x}, ${sp.y}) scale(${sp.s})`} style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.8))' }}>
+        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" fill="#fff" opacity="0.7" />
+        <animate attributeName="opacity" values="0.3;0.85;0.3" dur={`${2.5 + i * 0.45}s`} repeatCount="indefinite" />
+      </g>
+    ))}
+  </>
+);
+
 const FemaleBackground = () => (
   <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -15,37 +60,7 @@ const FemaleBackground = () => (
     </defs>
     <rect width="400" height="900" fill="url(#fem-base)" />
     <rect width="400" height="900" fill="url(#fem-glow)" />
-    {/* Micro dot particles */}
-    {[
-      { cx: 55, cy: 65, r: 2 }, { cx: 195, cy: 110, r: 1.5 },
-      { cx: 310, cy: 180, r: 1.2 }, { cx: 140, cy: 250, r: 2.2 },
-      { cx: 350, cy: 330, r: 1.5 }, { cx: 80, cy: 420, r: 1.8 },
-      { cx: 250, cy: 480, r: 1.3 }, { cx: 180, cy: 560, r: 2 },
-      { cx: 320, cy: 620, r: 1.5 }, { cx: 60, cy: 700, r: 1.8 },
-      { cx: 230, cy: 760, r: 1.2 }, { cx: 370, cy: 820, r: 1.5 },
-      { cx: 110, cy: 150, r: 1 }, { cx: 280, cy: 260, r: 1.3 },
-      { cx: 45, cy: 530, r: 1.5 }, { cx: 340, cy: 500, r: 1 },
-      { cx: 200, cy: 380, r: 1.8 }, { cx: 160, cy: 680, r: 1.2 },
-    ].map((s, i) => (
-      <circle key={`d-${i}`} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.5 + (i % 3) * 0.15}>
-        <animate attributeName="opacity" values={`${0.3};${0.7};${0.3}`} dur={`${3 + i * 0.4}s`} repeatCount="indefinite" />
-      </circle>
-    ))}
-    {/* 4-point cross sparkles */}
-    {[
-      { x: 145, y: 95, s: 5 }, { x: 310, y: 280, s: 8 },
-      { x: 230, y: 430, s: 6 }, { x: 80, y: 340, s: 4 },
-      { x: 350, y: 550, s: 5 }, { x: 100, y: 620, s: 7 },
-      { x: 270, y: 700, s: 5 }, { x: 55, y: 190, s: 4 },
-      { x: 330, y: 80, s: 6 }, { x: 190, y: 600, s: 4 },
-      { x: 360, cy: 750, s: 5 }, { x: 70, y: 830, s: 6 },
-    ].map((sp, i) => (
-      <g key={`s-${i}`} transform={`translate(${sp.x}, ${sp.y || 0})`}>
-        <line x1={-sp.s} y1="0" x2={sp.s} y2="0" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
-        <line x1="0" y1={-sp.s} x2="0" y2={sp.s} stroke="#fff" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
-        <animate attributeName="opacity" values="0.3;0.8;0.3" dur={`${2.5 + i * 0.5}s`} repeatCount="indefinite" />
-      </g>
-    ))}
+    <SparklesSVG />
   </svg>
 );
 
@@ -64,37 +79,7 @@ const MaleBackground = () => (
     </defs>
     <rect width="400" height="900" fill="url(#male-base)" />
     <rect width="400" height="900" fill="url(#male-glow)" />
-    {/* Micro dot particles */}
-    {[
-      { cx: 60, cy: 70, r: 2 }, { cx: 200, cy: 120, r: 1.5 },
-      { cx: 320, cy: 190, r: 1.2 }, { cx: 130, cy: 260, r: 2.2 },
-      { cx: 340, cy: 340, r: 1.5 }, { cx: 75, cy: 430, r: 1.8 },
-      { cx: 260, cy: 490, r: 1.3 }, { cx: 175, cy: 570, r: 2 },
-      { cx: 310, cy: 630, r: 1.5 }, { cx: 55, cy: 710, r: 1.8 },
-      { cx: 240, cy: 770, r: 1.2 }, { cx: 365, cy: 830, r: 1.5 },
-      { cx: 120, cy: 160, r: 1 }, { cx: 290, cy: 270, r: 1.3 },
-      { cx: 50, cy: 540, r: 1.5 }, { cx: 350, cy: 510, r: 1 },
-      { cx: 210, cy: 390, r: 1.8 }, { cx: 155, cy: 690, r: 1.2 },
-    ].map((s, i) => (
-      <circle key={`d-${i}`} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.5 + (i % 3) * 0.15}>
-        <animate attributeName="opacity" values={`${0.3};${0.7};${0.3}`} dur={`${3 + i * 0.4}s`} repeatCount="indefinite" />
-      </circle>
-    ))}
-    {/* 4-point cross sparkles */}
-    {[
-      { x: 150, y: 100, s: 5 }, { x: 300, y: 290, s: 8 },
-      { x: 220, y: 440, s: 6 }, { x: 85, y: 350, s: 4 },
-      { x: 345, y: 560, s: 5 }, { x: 95, y: 630, s: 7 },
-      { x: 280, y: 710, s: 5 }, { x: 50, y: 200, s: 4 },
-      { x: 325, y: 85, s: 6 }, { x: 185, y: 610, s: 4 },
-      { x: 355, y: 760, s: 5 }, { x: 75, y: 840, s: 6 },
-    ].map((sp, i) => (
-      <g key={`s-${i}`} transform={`translate(${sp.x}, ${sp.y})`}>
-        <line x1={-sp.s} y1="0" x2={sp.s} y2="0" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
-        <line x1="0" y1={-sp.s} x2="0" y2={sp.s} stroke="#fff" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
-        <animate attributeName="opacity" values="0.3;0.8;0.3" dur={`${2.5 + i * 0.5}s`} repeatCount="indefinite" />
-      </g>
-    ))}
+    <SparklesSVG />
   </svg>
 );
 
