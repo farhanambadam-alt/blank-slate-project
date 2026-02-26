@@ -8,7 +8,7 @@ const offers = [
 
 const OffersPage = () => {
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20">
       <header className="px-4 pt-6 pb-4">
         <h1 className="font-heading font-bold text-xl text-foreground">Offers & Deals</h1>
         <p className="text-xs font-body text-muted-foreground mt-1">Exclusive offers just for you</p>

@@ -7,7 +7,7 @@ const BookingsPage = () => {
   const filtered = bookings.filter((b) => b.status === tab);
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20">
       <header className="px-4 pt-6 pb-4">
         <h1 className="font-heading font-bold text-xl text-foreground">My Bookings</h1>
       </header>
