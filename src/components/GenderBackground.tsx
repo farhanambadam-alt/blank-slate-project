@@ -1,94 +1,77 @@
 import { useGender } from '@/contexts/GenderContext';
 
 const FemaleBackground = () => (
-  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="fem-grad" cx="50%" cy="0%" r="100%">
-        <stop offset="0%" stopColor="#FFB6C1" stopOpacity="0.5" />
-        <stop offset="40%" stopColor="#FADADD" stopOpacity="0.35" />
-        <stop offset="70%" stopColor="#FFE5EC" stopOpacity="0.25" />
-        <stop offset="100%" stopColor="#FFF5F7" stopOpacity="0.1" />
-      </radialGradient>
-      <radialGradient id="fem-glow" cx="50%" cy="15%" r="60%">
-        <stop offset="0%" stopColor="#FFB6C1" stopOpacity="0.2" />
-        <stop offset="100%" stopColor="#FFB6C1" stopOpacity="0" />
-      </radialGradient>
+      <linearGradient id="fem-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#F8E8F0" />
+        <stop offset="45%" stopColor="#F0E0E8" />
+        <stop offset="100%" stopColor="#E8D8E0" />
+      </linearGradient>
     </defs>
-    <rect width="400" height="800" fill="url(#fem-grad)" />
-    <rect width="400" height="800" fill="url(#fem-glow)" />
-    {/* Light rays */}
-    {[...Array(7)].map((_, i) => (
-      <line
-        key={i}
-        x1="200"
-        y1="0"
-        x2={60 + i * 50}
-        y2="800"
-        stroke="#FFB6C1"
-        strokeOpacity={0.06 + (i % 3) * 0.02}
-        strokeWidth={15 + (i % 2) * 10}
-      />
-    ))}
-    {/* Bokeh sparkles */}
+    <rect width="400" height="900" fill="url(#fem-grad)" />
+    {/* Micro star particles - tiny circular dots */}
     {[
-      { cx: 80, cy: 120, r: 3 }, { cx: 320, cy: 80, r: 2 },
-      { cx: 150, cy: 250, r: 2.5 }, { cx: 350, cy: 300, r: 1.5 },
-      { cx: 50, cy: 400, r: 2 }, { cx: 280, cy: 180, r: 3 },
-      { cx: 200, cy: 500, r: 1.8 }, { cx: 100, cy: 600, r: 2.5 },
-      { cx: 300, cy: 550, r: 2 }, { cx: 180, cy: 350, r: 1.5 },
+      { cx: 45, cy: 80, r: 1.2 }, { cx: 320, cy: 140, r: 1 },
+      { cx: 180, cy: 220, r: 1.4 }, { cx: 70, cy: 350, r: 1 },
+      { cx: 350, cy: 420, r: 1.3 }, { cx: 130, cy: 510, r: 1.1 },
+      { cx: 290, cy: 600, r: 1 }, { cx: 60, cy: 700, r: 1.2 },
+      { cx: 220, cy: 780, r: 1 }, { cx: 370, cy: 260, r: 1.1 },
+      { cx: 160, cy: 650, r: 1.3 }, { cx: 250, cy: 450, r: 1 },
     ].map((s, i) => (
-      <circle key={i} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.3 + (i % 3) * 0.1}>
-        <animate attributeName="opacity" values={`${0.2};${0.5};${0.2}`} dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+      <circle key={`dot-${i}`} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.35 + (i % 3) * 0.1}>
+        <animate attributeName="opacity" values={`${0.2};${0.5};${0.2}`} dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
       </circle>
+    ))}
+    {/* 4-point sparkles */}
+    {[
+      { x: 100, y: 160, s: 3 }, { x: 310, y: 320, s: 2.5 },
+      { x: 55, y: 500, s: 2 }, { x: 260, y: 680, s: 3 },
+      { x: 340, y: 50, s: 2.5 }, { x: 190, y: 850, s: 2 },
+    ].map((sp, i) => (
+      <g key={`sparkle-${i}`} transform={`translate(${sp.x}, ${sp.y})`} opacity={0.3}>
+        <line x1={-sp.s} y1="0" x2={sp.s} y2="0" stroke="#fff" strokeWidth="0.8" strokeLinecap="round" />
+        <line x1="0" y1={-sp.s} x2="0" y2={sp.s} stroke="#fff" strokeWidth="0.8" strokeLinecap="round" />
+        <animate attributeName="opacity" values="0.15;0.4;0.15" dur={`${2.5 + i * 0.6}s`} repeatCount="indefinite" />
+      </g>
     ))}
   </svg>
 );
 
 const MaleBackground = () => (
-  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <radialGradient id="male-grad" cx="50%" cy="0%" r="100%">
-        <stop offset="0%" stopColor="#B0D4F1" stopOpacity="0.4" />
-        <stop offset="40%" stopColor="#DCEEFF" stopOpacity="0.3" />
-        <stop offset="70%" stopColor="#EAF4FF" stopOpacity="0.2" />
-        <stop offset="100%" stopColor="#F5F9FF" stopOpacity="0.08" />
-      </radialGradient>
-      <radialGradient id="male-glow" cx="50%" cy="15%" r="55%">
-        <stop offset="0%" stopColor="#A8CCE8" stopOpacity="0.18" />
-        <stop offset="100%" stopColor="#A8CCE8" stopOpacity="0" />
-      </radialGradient>
-      {/* Vignette */}
-      <radialGradient id="male-vig" cx="50%" cy="50%" r="70%">
-        <stop offset="60%" stopColor="transparent" stopOpacity="0" />
-        <stop offset="100%" stopColor="#1a2a3a" stopOpacity="0.04" />
-      </radialGradient>
+      <linearGradient id="male-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#C7E3FE" />
+        <stop offset="45%" stopColor="#BDD1F8" />
+        <stop offset="100%" stopColor="#D5E5FA" />
+      </linearGradient>
     </defs>
-    <rect width="400" height="800" fill="url(#male-grad)" />
-    <rect width="400" height="800" fill="url(#male-glow)" />
-    <rect width="400" height="800" fill="url(#male-vig)" />
-    {/* Subtle light rays */}
-    {[...Array(6)].map((_, i) => (
-      <line
-        key={i}
-        x1="200"
-        y1="0"
-        x2={70 + i * 55}
-        y2="800"
-        stroke="#B0D4F1"
-        strokeOpacity={0.05 + (i % 2) * 0.02}
-        strokeWidth={12 + (i % 3) * 8}
-      />
-    ))}
-    {/* Glow particles */}
+    <rect width="400" height="900" fill="url(#male-grad)" />
+    {/* Micro star particles */}
     {[
-      { cx: 90, cy: 150, r: 2.5 }, { cx: 310, cy: 100, r: 2 },
-      { cx: 160, cy: 280, r: 2 }, { cx: 340, cy: 320, r: 1.5 },
-      { cx: 60, cy: 420, r: 1.8 }, { cx: 270, cy: 200, r: 2.5 },
-      { cx: 190, cy: 520, r: 1.5 }, { cx: 120, cy: 620, r: 2 },
+      { cx: 60, cy: 100, r: 1.1 }, { cx: 300, cy: 170, r: 1 },
+      { cx: 170, cy: 280, r: 1.3 }, { cx: 80, cy: 390, r: 1 },
+      { cx: 340, cy: 460, r: 1.2 }, { cx: 140, cy: 550, r: 1.1 },
+      { cx: 280, cy: 640, r: 1 }, { cx: 50, cy: 740, r: 1.2 },
+      { cx: 230, cy: 820, r: 1 }, { cx: 360, cy: 300, r: 1.1 },
+      { cx: 200, cy: 500, r: 1.3 }, { cx: 110, cy: 200, r: 1 },
     ].map((s, i) => (
-      <circle key={i} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.25 + (i % 3) * 0.08}>
-        <animate attributeName="opacity" values={`${0.15};${0.4};${0.15}`} dur={`${2.5 + i * 0.4}s`} repeatCount="indefinite" />
+      <circle key={`dot-${i}`} cx={s.cx} cy={s.cy} r={s.r} fill="#fff" opacity={0.3 + (i % 3) * 0.08}>
+        <animate attributeName="opacity" values={`${0.18};${0.42};${0.18}`} dur={`${3.5 + i * 0.4}s`} repeatCount="indefinite" />
       </circle>
+    ))}
+    {/* 4-point sparkles */}
+    {[
+      { x: 90, y: 180, s: 2.5 }, { x: 320, y: 350, s: 2 },
+      { x: 50, y: 530, s: 3 }, { x: 270, y: 720, s: 2.5 },
+      { x: 350, y: 70, s: 2 }, { x: 180, y: 880, s: 2.5 },
+    ].map((sp, i) => (
+      <g key={`sparkle-${i}`} transform={`translate(${sp.x}, ${sp.y})`} opacity={0.25}>
+        <line x1={-sp.s} y1="0" x2={sp.s} y2="0" stroke="#fff" strokeWidth="0.7" strokeLinecap="round" />
+        <line x1="0" y1={-sp.s} x2="0" y2={sp.s} stroke="#fff" strokeWidth="0.7" strokeLinecap="round" />
+        <animate attributeName="opacity" values="0.12;0.35;0.12" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
+      </g>
     ))}
   </svg>
 );
