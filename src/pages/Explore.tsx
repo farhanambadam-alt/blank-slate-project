@@ -23,9 +23,9 @@ const ExplorePage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20">
       {/* Search */}
-      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md border-b border-border px-5 pt-5 pb-3">
+      <div className="sticky top-0 z-20 backdrop-blur-md border-b border-border/50 px-5 pt-5 pb-3">
         <h1 className="font-heading font-bold text-[18px] text-foreground mb-3">Explore</h1>
         <div className="flex items-center gap-2.5 bg-card border border-border rounded-2xl px-4 py-3.5 card-shadow">
           <Search size={17} className="text-muted-foreground flex-shrink-0" />

@@ -37,7 +37,7 @@ const HomePage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20">
       {/* Header */}
       <header className="px-5 pt-6 pb-3">
         <div className="flex items-center justify-between">

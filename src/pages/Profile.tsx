@@ -11,7 +11,7 @@ const menuItems = [
 
 const ProfilePage = () => {
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pb-20">
       {/* User Info */}
       <div className="bg-primary px-4 pt-8 pb-6 rounded-b-3xl">
         <div className="flex items-center gap-4">
